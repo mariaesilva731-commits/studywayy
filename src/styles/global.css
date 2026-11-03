@@ -1,0 +1,33 @@
+:root {
+  --studyway-blue: #2563eb;
+  --studyway-purple: #7c3aed;
+  --studyway-text: #101a35;
+  --studyway-muted: #7b879f;
+  --studyway-background: #f3f7ff;
+  --studyway-surface: #ffffff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--studyway-background);
+  color: var(--studyway-text);
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
