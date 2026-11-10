@@ -1,88 +1,39 @@
+import { Platform } from "react-native";
 import { pdfMaterials } from "../data/pdfCatalog.generated";
-import { supabase } from "./supabase";
 
-const MATERIALS_TABLE = "studyway_materials";
-const MATERIALS_BUCKET = "studyway-materials";
-const materialFields = "id, institution, subject, title, filename, source_path, markdown_path, original_storage_path, source_size_bytes, markdown_size_bytes, conversion_status, review_notes";
-const markdownCache = new Map();
+const localPdfPort = process.env.EXPO_PUBLIC_LOCAL_PDF_PORT || "4317";
 
-export async function getMaterials(institution) {
-  const { data, error } = await supabase
-    .from(MATERIALS_TABLE)
-    .select(materialFields)
-    .eq("institution", institution)
-    .order("title")
-    .limit(1000);
-
-  if (!error && data?.length) {
-    return { data: data.map(mapMaterial), error: null };
+function getLocalPdfBaseUrl() {
+  if (process.env.EXPO_PUBLIC_LOCAL_PDF_BASE_URL) {
+    return process.env.EXPO_PUBLIC_LOCAL_PDF_BASE_URL.replace(/\/+$/, "");
   }
 
-  return {
-    data: pdfMaterials.filter((material) => material.institution === institution),
-    error: error || null,
-  };
+  if (Platform.OS === "web" && typeof window !== "undefined") {
+    return `${window.location.protocol}//${window.location.hostname}:${localPdfPort}`;
+  }
+
+  return null;
 }
 
-function mapMaterial(material) {
-  return {
-    ...material,
-    sourcePath: material.source_path ?? material.sourcePath,
-    markdownPath: material.markdown_path ?? material.markdownPath,
-    originalStoragePath: material.original_storage_path ?? material.originalStoragePath,
-    sourceSizeBytes: material.source_size_bytes ?? material.sourceSizeBytes,
-    markdownSizeBytes: material.markdown_size_bytes ?? material.markdownSizeBytes,
-    conversionStatus: material.conversion_status ?? material.conversionStatus,
-    reviewNotes: material.review_notes ?? material.reviewNotes,
-  };
+export async function getMaterials(institution) {
+  const data = pdfMaterials
+    .filter((material) => material.institution === institution)
+    .sort((first, second) => institution === "ENEM"
+      ? first.subject.localeCompare(second.subject, "pt-BR") ||
+        first.sourcePath.localeCompare(second.sourcePath, "pt-BR")
+      : first.title.localeCompare(second.title, "pt-BR"));
+  return { data, error: null };
 }
 
 export async function getMaterialDetails(materialId) {
-  const { data, error } = await supabase
-    .from(MATERIALS_TABLE)
-    .select(materialFields)
-    .eq("id", materialId)
-    .maybeSingle();
-  const fallback = pdfMaterials.find((material) => material.id === materialId) || null;
-  const material = data ? mapMaterial(data) : fallback;
-  const publishedOriginalPath = data?.original_storage_path || null;
-  const originalPdfUrl = publishedOriginalPath
-    ? supabase.storage.from(MATERIALS_BUCKET).getPublicUrl(publishedOriginalPath).data.publicUrl
+  const material = pdfMaterials.find((item) => item.id === materialId) || null;
+  const pdfBaseUrl = getLocalPdfBaseUrl();
+  const originalPdfUrl = material && pdfBaseUrl
+    ? `${pdfBaseUrl}/pdf?path=${encodeURIComponent(material.sourcePath)}`
     : null;
 
-  return { data: material ? { ...material, originalPdfUrl } : null, error };
-}
-
-export async function loadMaterialMarkdown(material) {
-  if (!material?.markdownPath) {
-    return {
-      data: null,
-      error: new Error(material?.conversionStatus === "review_required"
-        ? "Este material precisa de revisão e ainda não tem uma versão Markdown disponível."
-        : "A versão Markdown deste material ainda não foi publicada no armazenamento."),
-    };
-  }
-
-  if (markdownCache.has(material.markdownPath)) {
-    const cached = markdownCache.get(material.markdownPath);
-    markdownCache.delete(material.markdownPath);
-    markdownCache.set(material.markdownPath, cached);
-    return { data: cached, error: null };
-  }
-
-  const { data: file, error } = await supabase.storage
-    .from(MATERIALS_BUCKET)
-    .download(material.markdownPath);
-  if (error) return { data: null, error };
-
-  try {
-    const markdown = await file.text();
-    if (markdown.length <= 1_500_000) {
-      markdownCache.set(material.markdownPath, markdown);
-      if (markdownCache.size > 3) markdownCache.delete(markdownCache.keys().next().value);
-    }
-    return { data: markdown, error: null };
-  } catch (readError) {
-    return { data: null, error: readError };
-  }
+  return {
+    data: material ? { ...material, originalPdfUrl } : null,
+    error: null,
+  };
 }

@@ -8,16 +8,17 @@
     "convert:materials": "npm run generate:pdf-catalog && node scripts/convert-pdfs-to-markdown.mjs",
     "upload:materials": "node scripts/upload-materials-to-supabase.mjs",
     "upload:markdown": "node scripts/upload-markdown-material.mjs",
+    "pdfs:serve": "node scripts/serve-local-pdfs.mjs",
     "prestart": "npm run generate:pdf-catalog",
     "predev": "npm run generate:pdf-catalog",
     "preandroid": "npm run generate:pdf-catalog",
     "preios": "npm run generate:pdf-catalog",
     "preweb": "npm run generate:pdf-catalog",
-    "start": "expo start",
-    "dev": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "start": "node scripts/start-local-expo.mjs",
+    "dev": "node scripts/start-local-expo.mjs",
+    "android": "node scripts/start-local-expo.mjs --android",
+    "ios": "node scripts/start-local-expo.mjs --ios",
+    "web": "node scripts/start-local-expo.mjs --web"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.0",

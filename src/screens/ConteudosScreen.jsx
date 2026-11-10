@@ -9,6 +9,7 @@ import { FONTS } from "../styles/fonts";
 import { styles } from "../styles/globalStyles";
 import { pdfMaterials } from "../data/pdfCatalog.generated";
 import { getMaterials } from "../services/materialService";
+import { getPdfDisplayName, getPdfDisplaySubtitle } from "../utils/pdfDisplayNames";
 
 const contentTitleStyles = StyleSheet.create({
   title: { fontFamily: FONTS.bold, fontSize: 14, fontWeight: "700" },
@@ -48,7 +49,7 @@ export default function ConteudosScreen({ onNavigate, onBack, subjects }) {
   ];
   const visibleMaterials = materials.filter((material) =>
     (selectedSubject === "Todas" || material.subject === selectedSubject) &&
-    `${material.title} ${material.subject}`
+    `${getPdfDisplayName(material)} ${material.subject}`
       .toLowerCase()
       .includes(search.trim().toLowerCase()),
   );
@@ -142,7 +143,7 @@ export default function ConteudosScreen({ onNavigate, onBack, subjects }) {
           <Pressable
             key={`${material.institution}/${material.subject}/${material.filename}`}
             accessibilityRole="button"
-            accessibilityLabel={`Abrir material: ${material.title}`}
+            accessibilityLabel={`Abrir material: ${getPdfDisplayName(material)}`}
             onPress={() =>
               onNavigate("pdfViewer", { materialId: material.id })
             }
@@ -152,8 +153,12 @@ export default function ConteudosScreen({ onNavigate, onBack, subjects }) {
               <Ionicons name="document-text-outline" size={24} color={COLORS.blue2} />
             </View>
             <View style={styles.flexFill}>
-              <Text style={[styles.cardTitle, contentTitleStyles.title]}>{material.title}</Text>
-              <Text style={[styles.cardMuted, contentTitleStyles.text]}>{material.subject} • {material.filename}</Text>
+              <Text numberOfLines={2} ellipsizeMode="tail" style={[styles.cardTitle, contentTitleStyles.title]}>
+                {getPdfDisplayName(material)}
+              </Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.cardMuted, contentTitleStyles.text]}>
+                {getPdfDisplaySubtitle(material)}
+              </Text>
             </View>
             <Ionicons name="open-outline" size={20} color={COLORS.muted} />
           </Pressable>
