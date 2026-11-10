@@ -34,7 +34,6 @@ export default function App() {
     supabase.auth.getSession().then(({ data }) => {
       const sessionUser = data.session?.user || null;
       setUser(sessionUser);
-      if (sessionUser) setRouteStack([{ screen: "home", params: {} }]);
     });
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);

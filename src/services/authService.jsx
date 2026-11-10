@@ -8,6 +8,7 @@ export function signUp(email, password, fullName) {
   return supabase.auth.signUp({
     email,
     password,
+    // O nome fica associado à conta para preencher o perfil após o login.
     options: { data: { full_name: fullName } },
   });
 }

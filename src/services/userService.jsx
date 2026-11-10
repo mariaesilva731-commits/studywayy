@@ -15,13 +15,18 @@ export async function getUserProfile() {
     .eq("id", user.id)
     .maybeSingle();
 
-  if (result.error || result.data) return result;
+  if (result.error) return result;
+
+  const fullName = user.user_metadata?.full_name?.trim() || "";
+  if (result.data?.full_name?.trim() || (result.data && !fullName)) {
+    return result;
+  }
 
   return supabase
     .from("studyway_profiles")
     .upsert({
       id: user.id,
-      full_name: user.user_metadata?.full_name || "",
+      full_name: fullName,
     })
     .select("id, full_name, institution")
     .single();
