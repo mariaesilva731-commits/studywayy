@@ -166,10 +166,10 @@ export default function ConteudosScreen({ onNavigate, onBack, subjects }) {
         {!isLoadingMaterials && visibleMaterials.length === 0 && (
           <Text style={[styles.emptyActivities, contentTitleStyles.text]}>Nenhum material encontrado.</Text>
         )}
-        <Text style={[styles.sectionTitle, contentTitleStyles.section, contentTitleStyles.text]}>Simulados</Text>
+        <Text style={[styles.sectionTitle, contentTitleStyles.section, contentTitleStyles.text]}>Provas anteriores</Text>
         <Pressable
-          onPress={() => onNavigate("simulados")}
-          style={styles.simuladoCard}
+          onPress={() => onNavigate("provas")}
+          style={styles.examCard}
         >
           <GradientSurface style={styles.gradientFill} />
           <Ionicons
@@ -178,9 +178,9 @@ export default function ConteudosScreen({ onNavigate, onBack, subjects }) {
             color={COLORS.white}
           />
           <View style={styles.flexFill}>
-            <Text style={[styles.whiteCardTitle, contentTitleStyles.title]}>Simulados personalizados</Text>
+            <Text style={[styles.whiteCardTitle, contentTitleStyles.title]}>Provas e gabaritos</Text>
             <Text style={[styles.whiteCardText, contentTitleStyles.text]}>
-              Treine de acordo com sua prova.
+              Acesse provas do ENEM, FUVEST e UNESP.
             </Text>
           </View>
           <Ionicons name="arrow-forward" size={21} color={COLORS.white} />

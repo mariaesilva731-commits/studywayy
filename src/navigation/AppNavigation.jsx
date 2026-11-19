@@ -12,8 +12,7 @@ import ConteudosScreen from "../screens/ConteudosScreen";
 import MateriaScreen from "../screens/MateriaScreen";
 import AulaScreen from "../screens/AulaScreen";
 import ExerciciosScreen from "../screens/ExerciciosScreen";
-import SimuladosScreen from "../screens/SimuladosScreen";
-import SimuladoDetalhesScreen from "../screens/SimuladoDetalhesScreen";
+import ProvasScreen from "../screens/ProvasScreen";
 import DesempenhoScreen from "../screens/DesempenhoScreen";
 import PerfilScreen from "../screens/PerfilScreen";
 import ConfiguracoesScreen from "../screens/ConfiguracoesScreen";
@@ -102,8 +101,9 @@ export default function AppNavigation({
         onCreate={async (fullName, email, password) => {
           const result = await signUp(email, password, fullName);
           if (result.error) return result;
+          if (result.profileError) return { error: { message: result.message } };
           if (result.data.session) {
-            navigate("test");
+            navigate("home", {}, { reset: true });
             return result;
           }
           return {
@@ -175,16 +175,8 @@ export default function AppNavigation({
         simulationId={routeParams?.simulationId}
       />
     );
-  if (screen === "simulados")
-    return <SimuladosScreen onNavigate={navigate} onBack={back} />;
-  if (screen === "simuladoDetail")
-    return (
-      <SimuladoDetalhesScreen
-        onNavigate={navigate}
-        onBack={back}
-        simulationId={routeParams?.simulationId}
-      />
-    );
+  if (screen === "provas")
+    return <ProvasScreen onNavigate={navigate} onBack={back} />;
   if (screen === "performance")
     return (
       <DesempenhoScreen

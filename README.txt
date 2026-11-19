@@ -49,8 +49,7 @@ Conteúdos
 Matéria
 Aula
 Exercícios
-Simulados
-Detalhes do simulado
+Provas anteriores e gabaritos (ENEM, FUVEST/USP e UNESP)
 Desempenho
 Perfil
 Configurações

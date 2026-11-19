@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  simuladoCard: {
+  examCard: {
     backgroundColor: COLORS.purple2,
     borderRadius: 5,
     padding: 13,

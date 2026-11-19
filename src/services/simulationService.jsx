@@ -1,12 +1,5 @@
 import { supabase } from "./supabase";
 
-export async function getSimulations() {
-  return supabase
-    .from("studyway_simulations")
-    .select("id, title, institution, subject, question_count, duration_minutes")
-    .order("sort_order");
-}
-
 export async function getSimulationQuestions(simulationId = null) {
   let query = supabase
     .from("studyway_questions")

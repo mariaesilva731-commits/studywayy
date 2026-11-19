@@ -4,6 +4,7 @@ import MainLayout from "../components/MainLayout";
 import Header from "../components/Header";
 import { getMaterialDetails } from "../services/materialService";
 import { getPdfDisplayName } from "../utils/pdfDisplayNames";
+import { getExamDisplayName, getExamDisplaySubtitle } from "../utils/examDisplayNames";
 import { COLORS } from "../styles/colors";
 import { styles } from "../styles/globalStyles";
 
@@ -54,9 +55,11 @@ export default function PdfViewerScreen({ materialId, onBack }) {
     await Linking.openURL(material.originalPdfUrl);
   }
 
-  const headerTitle = material ? getPdfDisplayName(material) : "PDF";
+  const headerTitle = material
+    ? getExamDisplayName(material) || getPdfDisplayName(material)
+    : "PDF";
   const headerSubtitle = material
-    ? `${material.institution} • ${material.subject}`
+    ? getExamDisplaySubtitle(material)
     : undefined;
 
   return (

@@ -1,5 +1,93 @@
 [
   {
+    "id": "ENEM/1º dia/2025_GB_impresso_D1_CD1.pdf",
+    "institution": "ENEM",
+    "subject": "1º dia",
+    "title": "2025 GB impresso D1 CD1",
+    "filename": "2025_GB_impresso_D1_CD1.pdf",
+    "sourcePath": "Arquivos ENEM/Provas/2025/1º dia/2025_GB_impresso_D1_CD1.pdf",
+    "markdownPath": "enem/1-dia/079a4843386e.md",
+    "originalStoragePath": "enem/1-dia/079a4843386e.pdf",
+    "sourceSizeBytes": 132331
+  },
+  {
+    "id": "ENEM/1º dia/2025_GB_impresso_D1_CD2.pdf",
+    "institution": "ENEM",
+    "subject": "1º dia",
+    "title": "2025 GB impresso D1 CD2",
+    "filename": "2025_GB_impresso_D1_CD2.pdf",
+    "sourcePath": "Arquivos ENEM/Provas/2025/1º dia/2025_GB_impresso_D1_CD2.pdf",
+    "markdownPath": "enem/1-dia/5f4dbe4cfc41.md",
+    "originalStoragePath": "enem/1-dia/5f4dbe4cfc41.pdf",
+    "sourceSizeBytes": 133142
+  },
+  {
+    "id": "ENEM/1º dia/2025_PV_impresso_D1_CD1.pdf",
+    "institution": "ENEM",
+    "subject": "1º dia",
+    "title": "2025 PV impresso D1 CD1",
+    "filename": "2025_PV_impresso_D1_CD1.pdf",
+    "sourcePath": "Arquivos ENEM/Provas/2025/1º dia/2025_PV_impresso_D1_CD1.pdf",
+    "markdownPath": "enem/1-dia/b99e7f9597c7.md",
+    "originalStoragePath": "enem/1-dia/b99e7f9597c7.pdf",
+    "sourceSizeBytes": 3343529
+  },
+  {
+    "id": "ENEM/1º dia/2025_PV_impresso_D1_CD2.pdf",
+    "institution": "ENEM",
+    "subject": "1º dia",
+    "title": "2025 PV impresso D1 CD2",
+    "filename": "2025_PV_impresso_D1_CD2.pdf",
+    "sourcePath": "Arquivos ENEM/Provas/2025/1º dia/2025_PV_impresso_D1_CD2.pdf",
+    "markdownPath": "enem/1-dia/8888042c87d6.md",
+    "originalStoragePath": "enem/1-dia/8888042c87d6.pdf",
+    "sourceSizeBytes": 2819878
+  },
+  {
+    "id": "ENEM/2º dia/2025_GB_impresso_D2_CD5.pdf",
+    "institution": "ENEM",
+    "subject": "2º dia",
+    "title": "2025 GB impresso D2 CD5",
+    "filename": "2025_GB_impresso_D2_CD5.pdf",
+    "sourcePath": "Arquivos ENEM/Provas/2025/2º dia/2025_GB_impresso_D2_CD5.pdf",
+    "markdownPath": "enem/2-dia/e10b2fd7f98d.md",
+    "originalStoragePath": "enem/2-dia/e10b2fd7f98d.pdf",
+    "sourceSizeBytes": 294764
+  },
+  {
+    "id": "ENEM/2º dia/2025_GB_impresso_D2_CD7.pdf",
+    "institution": "ENEM",
+    "subject": "2º dia",
+    "title": "2025 GB impresso D2 CD7",
+    "filename": "2025_GB_impresso_D2_CD7.pdf",
+    "sourcePath": "Arquivos ENEM/Provas/2025/2º dia/2025_GB_impresso_D2_CD7.pdf",
+    "markdownPath": "enem/2-dia/50fcff2170a7.md",
+    "originalStoragePath": "enem/2-dia/50fcff2170a7.pdf",
+    "sourceSizeBytes": 293450
+  },
+  {
+    "id": "ENEM/2º dia/2025_PV_impresso_D2_CD5.pdf",
+    "institution": "ENEM",
+    "subject": "2º dia",
+    "title": "2025 PV impresso D2 CD5",
+    "filename": "2025_PV_impresso_D2_CD5.pdf",
+    "sourcePath": "Arquivos ENEM/Provas/2025/2º dia/2025_PV_impresso_D2_CD5.pdf",
+    "markdownPath": "enem/2-dia/a8df278d7a0e.md",
+    "originalStoragePath": "enem/2-dia/a8df278d7a0e.pdf",
+    "sourceSizeBytes": 3157985
+  },
+  {
+    "id": "ENEM/2º dia/2025_PV_impresso_D2_CD7.pdf",
+    "institution": "ENEM",
+    "subject": "2º dia",
+    "title": "2025 PV impresso D2 CD7",
+    "filename": "2025_PV_impresso_D2_CD7.pdf",
+    "sourcePath": "Arquivos ENEM/Provas/2025/2º dia/2025_PV_impresso_D2_CD7.pdf",
+    "markdownPath": "enem/2-dia/f1ff703ebb3f.md",
+    "originalStoragePath": "enem/2-dia/f1ff703ebb3f.pdf",
+    "sourceSizeBytes": 3685677
+  },
+  {
     "id": "ENEM/BIOLOGIA/95fbe1f0-ad64-456b-8c58-83e55679f89c.pdf",
     "institution": "ENEM",
     "subject": "BIOLOGIA",
@@ -1010,6 +1098,50 @@
     "markdownPath": "enem/quimica/60874ad50636.md",
     "originalStoragePath": "enem/quimica/60874ad50636.pdf",
     "sourceSizeBytes": 1466789
+  },
+  {
+    "id": "UNESP/1ª fase/caderno-provas-1-fase-unesp-2025.pdf",
+    "institution": "UNESP",
+    "subject": "1ª fase",
+    "title": "caderno-provas-1-fase-unesp-2025",
+    "filename": "caderno-provas-1-fase-unesp-2025.pdf",
+    "sourcePath": "Arquivos UNESP/Provas/2025/1ª fase/caderno-provas-1-fase-unesp-2025.pdf",
+    "markdownPath": "unesp/1-fase/0be5f835beac.md",
+    "originalStoragePath": "unesp/1-fase/0be5f835beac.pdf",
+    "sourceSizeBytes": 2884780
+  },
+  {
+    "id": "UNESP/1ª fase/gabarito-1-fase-unesp-2025.pdf",
+    "institution": "UNESP",
+    "subject": "1ª fase",
+    "title": "gabarito-1-fase-unesp-2025",
+    "filename": "gabarito-1-fase-unesp-2025.pdf",
+    "sourcePath": "Arquivos UNESP/Provas/2025/1ª fase/gabarito-1-fase-unesp-2025.pdf",
+    "markdownPath": "unesp/1-fase/465315f06098.md",
+    "originalStoragePath": "unesp/1-fase/465315f06098.pdf",
+    "sourceSizeBytes": 111408
+  },
+  {
+    "id": "UNESP/1ª fase/gabarito-unesp-2024.pdf",
+    "institution": "UNESP",
+    "subject": "1ª fase",
+    "title": "gabarito-unesp-2024",
+    "filename": "gabarito-unesp-2024.pdf",
+    "sourcePath": "Arquivos UNESP/Provas/2024/1ª fase/gabarito-unesp-2024.pdf",
+    "markdownPath": "unesp/1-fase/0ee755aaea8d.md",
+    "originalStoragePath": "unesp/1-fase/0ee755aaea8d.pdf",
+    "sourceSizeBytes": 325874
+  },
+  {
+    "id": "UNESP/1ª fase/prova-unesp-2024-1-fase.pdf",
+    "institution": "UNESP",
+    "subject": "1ª fase",
+    "title": "prova-unesp-2024-1-fase",
+    "filename": "prova-unesp-2024-1-fase.pdf",
+    "sourcePath": "Arquivos UNESP/Provas/2024/1ª fase/prova-unesp-2024-1-fase.pdf",
+    "markdownPath": "unesp/1-fase/68d31c2198d1.md",
+    "originalStoragePath": "unesp/1-fase/68d31c2198d1.pdf",
+    "sourceSizeBytes": 2922782
   },
   {
     "id": "UNESP/biologia/BIOLOGIA.pdf",
@@ -2343,6 +2475,28 @@
     "sourceSizeBytes": 124406
   },
   {
+    "id": "UNESP/Meio do ano/gabarito-unesp-2024-meio-ano.pdf",
+    "institution": "UNESP",
+    "subject": "Meio do ano",
+    "title": "gabarito-unesp-2024-meio-ano",
+    "filename": "gabarito-unesp-2024-meio-ano.pdf",
+    "sourcePath": "Arquivos UNESP/Provas/2024/Meio do ano/gabarito-unesp-2024-meio-ano.pdf",
+    "markdownPath": "unesp/meio-do-ano/2f299053b5b5.md",
+    "originalStoragePath": "unesp/meio-do-ano/2f299053b5b5.pdf",
+    "sourceSizeBytes": 111025
+  },
+  {
+    "id": "UNESP/Meio do ano/prova-unesp-2024-meio-ano.pdf",
+    "institution": "UNESP",
+    "subject": "Meio do ano",
+    "title": "prova-unesp-2024-meio-ano",
+    "filename": "prova-unesp-2024-meio-ano.pdf",
+    "sourcePath": "Arquivos UNESP/Provas/2024/Meio do ano/prova-unesp-2024-meio-ano.pdf",
+    "markdownPath": "unesp/meio-do-ano/51416e2d175e.md",
+    "originalStoragePath": "unesp/meio-do-ano/51416e2d175e.pdf",
+    "sourceSizeBytes": 2839451
+  },
+  {
     "id": "UNESP/redação/carta argumentativa.pdf",
     "institution": "UNESP",
     "subject": "redação",
@@ -2409,6 +2563,160 @@
     "sourceSizeBytes": 62847
   },
   {
+    "id": "USP/1ª fase/fuvest-2026-1-fase-prova-1.pdf",
+    "institution": "USP",
+    "subject": "1ª fase",
+    "title": "fuvest-2026-1-fase-prova-1",
+    "filename": "fuvest-2026-1-fase-prova-1.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/1ª fase/fuvest-2026-1-fase-prova-1.pdf",
+    "markdownPath": "usp/1-fase/6a51001edef2.md",
+    "originalStoragePath": "usp/1-fase/6a51001edef2.pdf",
+    "sourceSizeBytes": 8019288
+  },
+  {
+    "id": "USP/1ª fase/fuvest-2026-1-fase-prova-2.pdf",
+    "institution": "USP",
+    "subject": "1ª fase",
+    "title": "fuvest-2026-1-fase-prova-2",
+    "filename": "fuvest-2026-1-fase-prova-2.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/1ª fase/fuvest-2026-1-fase-prova-2.pdf",
+    "markdownPath": "usp/1-fase/bdd9406bb266.md",
+    "originalStoragePath": "usp/1-fase/bdd9406bb266.pdf",
+    "sourceSizeBytes": 8012341
+  },
+  {
+    "id": "USP/1ª fase/fuvest-2026-1-fase-prova-3.pdf",
+    "institution": "USP",
+    "subject": "1ª fase",
+    "title": "fuvest-2026-1-fase-prova-3",
+    "filename": "fuvest-2026-1-fase-prova-3.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/1ª fase/fuvest-2026-1-fase-prova-3.pdf",
+    "markdownPath": "usp/1-fase/818913af077e.md",
+    "originalStoragePath": "usp/1-fase/818913af077e.pdf",
+    "sourceSizeBytes": 8012573
+  },
+  {
+    "id": "USP/1ª fase/fuvest-2026-1-fase-prova-4.pdf",
+    "institution": "USP",
+    "subject": "1ª fase",
+    "title": "fuvest-2026-1-fase-prova-4",
+    "filename": "fuvest-2026-1-fase-prova-4.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/1ª fase/fuvest-2026-1-fase-prova-4.pdf",
+    "markdownPath": "usp/1-fase/7dcaf06f5c8a.md",
+    "originalStoragePath": "usp/1-fase/7dcaf06f5c8a.pdf",
+    "sourceSizeBytes": 8011091
+  },
+  {
+    "id": "USP/1ª fase/fuvest2025_primeira_fase_prova_V1.pdf",
+    "institution": "USP",
+    "subject": "1ª fase",
+    "title": "fuvest2025 primeira fase prova V1",
+    "filename": "fuvest2025_primeira_fase_prova_V1.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2025/1ª fase/fuvest2025_primeira_fase_prova_V1.pdf",
+    "markdownPath": "usp/1-fase/adb2757fc63f.md",
+    "originalStoragePath": "usp/1-fase/adb2757fc63f.pdf",
+    "sourceSizeBytes": 8978910
+  },
+  {
+    "id": "USP/1ª fase/fuvest2025_primeira_fase_prova_V2.pdf",
+    "institution": "USP",
+    "subject": "1ª fase",
+    "title": "fuvest2025 primeira fase prova V2",
+    "filename": "fuvest2025_primeira_fase_prova_V2.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2025/1ª fase/fuvest2025_primeira_fase_prova_V2.pdf",
+    "markdownPath": "usp/1-fase/1b54d9946237.md",
+    "originalStoragePath": "usp/1-fase/1b54d9946237.pdf",
+    "sourceSizeBytes": 8983240
+  },
+  {
+    "id": "USP/1ª fase/fuvest2025_primeira_fase_prova_V3.pdf",
+    "institution": "USP",
+    "subject": "1ª fase",
+    "title": "fuvest2025 primeira fase prova V3",
+    "filename": "fuvest2025_primeira_fase_prova_V3.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2025/1ª fase/fuvest2025_primeira_fase_prova_V3.pdf",
+    "markdownPath": "usp/1-fase/e837bd991b81.md",
+    "originalStoragePath": "usp/1-fase/e837bd991b81.pdf",
+    "sourceSizeBytes": 8979762
+  },
+  {
+    "id": "USP/1ª fase/fuvest2025_primeira_fase_prova_V4.pdf",
+    "institution": "USP",
+    "subject": "1ª fase",
+    "title": "fuvest2025 primeira fase prova V4",
+    "filename": "fuvest2025_primeira_fase_prova_V4.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2025/1ª fase/fuvest2025_primeira_fase_prova_V4.pdf",
+    "markdownPath": "usp/1-fase/e07583c82890.md",
+    "originalStoragePath": "usp/1-fase/e07583c82890.pdf",
+    "sourceSizeBytes": 8980433
+  },
+  {
+    "id": "USP/1ª fase/gabarito-fuvest-2026-1-fase.pdf",
+    "institution": "USP",
+    "subject": "1ª fase",
+    "title": "gabarito-fuvest-2026-1-fase",
+    "filename": "gabarito-fuvest-2026-1-fase.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/1ª fase/gabarito-fuvest-2026-1-fase.pdf",
+    "markdownPath": "usp/1-fase/a7b9b8c2865e.md",
+    "originalStoragePath": "usp/1-fase/a7b9b8c2865e.pdf",
+    "sourceSizeBytes": 218795
+  },
+  {
+    "id": "USP/2ª fase/fuvest2025_prova_2fase_dia1.pdf",
+    "institution": "USP",
+    "subject": "2ª fase",
+    "title": "fuvest2025 prova 2fase dia1",
+    "filename": "fuvest2025_prova_2fase_dia1.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2025/2ª fase/fuvest2025_prova_2fase_dia1.pdf",
+    "markdownPath": "usp/2-fase/c414637dad52.md",
+    "originalStoragePath": "usp/2-fase/c414637dad52.pdf",
+    "sourceSizeBytes": 2834838
+  },
+  {
+    "id": "USP/2ª fase/fuvest2025_prova_2fase_dia2.pdf",
+    "institution": "USP",
+    "subject": "2ª fase",
+    "title": "fuvest2025 prova 2fase dia2",
+    "filename": "fuvest2025_prova_2fase_dia2.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2025/2ª fase/fuvest2025_prova_2fase_dia2.pdf",
+    "markdownPath": "usp/2-fase/14fb0d312cfb.md",
+    "originalStoragePath": "usp/2-fase/14fb0d312cfb.pdf",
+    "sourceSizeBytes": 11849725
+  },
+  {
+    "id": "USP/2ª fase/prova-fuvest-2-fase-2026-dia-1.pdf",
+    "institution": "USP",
+    "subject": "2ª fase",
+    "title": "prova-fuvest-2-fase-2026-dia-1",
+    "filename": "prova-fuvest-2-fase-2026-dia-1.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/2ª fase/prova-fuvest-2-fase-2026-dia-1.pdf",
+    "markdownPath": "usp/2-fase/5cb749d14b64.md",
+    "originalStoragePath": "usp/2-fase/5cb749d14b64.pdf",
+    "sourceSizeBytes": 2764976
+  },
+  {
+    "id": "USP/2ª fase/prova-fuvest-2-fase-2026-dia-2.pdf",
+    "institution": "USP",
+    "subject": "2ª fase",
+    "title": "prova-fuvest-2-fase-2026-dia-2",
+    "filename": "prova-fuvest-2-fase-2026-dia-2.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/2ª fase/prova-fuvest-2-fase-2026-dia-2.pdf",
+    "markdownPath": "usp/2-fase/401d90aef5c9.md",
+    "originalStoragePath": "usp/2-fase/401d90aef5c9.pdf",
+    "sourceSizeBytes": 7038275
+  },
+  {
+    "id": "USP/2ª fase/prova-fuvest-2-fase-2026-redacao.pdf",
+    "institution": "USP",
+    "subject": "2ª fase",
+    "title": "prova-fuvest-2-fase-2026-redacao",
+    "filename": "prova-fuvest-2-fase-2026-redacao.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/2ª fase/prova-fuvest-2-fase-2026-redacao.pdf",
+    "markdownPath": "usp/2-fase/51174dc2a0f1.md",
+    "originalStoragePath": "usp/2-fase/51174dc2a0f1.pdf",
+    "sourceSizeBytes": 1077365
+  },
+  {
     "id": "USP/BIOLOGIA/Livro+Manual+Prático+de+Biologia+Tecidual_vf2.pdf",
     "institution": "USP",
     "subject": "BIOLOGIA",
@@ -2418,6 +2726,17 @@
     "markdownPath": "usp/biologia/301c052c388f.md",
     "originalStoragePath": "usp/biologia/301c052c388f.pdf",
     "sourceSizeBytes": 311660936
+  },
+  {
+    "id": "USP/biologia/respostas-esperadas-fuvest-2-fase-2026-biologia.pdf",
+    "institution": "USP",
+    "subject": "biologia",
+    "title": "respostas-esperadas-fuvest-2-fase-2026-biologia",
+    "filename": "respostas-esperadas-fuvest-2-fase-2026-biologia.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/2ª fase/biologia/respostas-esperadas-fuvest-2-fase-2026-biologia.pdf",
+    "markdownPath": "usp/biologia/9ab7b869db70.md",
+    "originalStoragePath": "usp/biologia/9ab7b869db70.pdf",
+    "sourceSizeBytes": 809269
   },
   {
     "id": "USP/FILOSOFIA/10+Diálogos+com+Wittgenstein+na+Educação.pdf",
@@ -2759,6 +3078,39 @@
     "markdownPath": "usp/fisica/a09ca1a2886e.md",
     "originalStoragePath": "usp/fisica/a09ca1a2886e.pdf",
     "sourceSizeBytes": 3702567
+  },
+  {
+    "id": "USP/fisica/respostas-esperadas-fuvest-2-fase-2026-fisica.pdf",
+    "institution": "USP",
+    "subject": "fisica",
+    "title": "respostas-esperadas-fuvest-2-fase-2026-fisica",
+    "filename": "respostas-esperadas-fuvest-2-fase-2026-fisica.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/2ª fase/fisica/respostas-esperadas-fuvest-2-fase-2026-fisica.pdf",
+    "markdownPath": "usp/fisica/6cdbaf34a1aa.md",
+    "originalStoragePath": "usp/fisica/6cdbaf34a1aa.pdf",
+    "sourceSizeBytes": 1264504
+  },
+  {
+    "id": "USP/geografia/respostas-esperadas-fuvest-2-fase-2026-geografia.pdf",
+    "institution": "USP",
+    "subject": "geografia",
+    "title": "respostas-esperadas-fuvest-2-fase-2026-geografia",
+    "filename": "respostas-esperadas-fuvest-2-fase-2026-geografia.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/2ª fase/geografia/respostas-esperadas-fuvest-2-fase-2026-geografia.pdf",
+    "markdownPath": "usp/geografia/4f9f1db2e4de.md",
+    "originalStoragePath": "usp/geografia/4f9f1db2e4de.pdf",
+    "sourceSizeBytes": 1763881
+  },
+  {
+    "id": "USP/historia/respostas-esperadas-fuvest-2-fase-2026-historia.pdf",
+    "institution": "USP",
+    "subject": "historia",
+    "title": "respostas-esperadas-fuvest-2-fase-2026-historia",
+    "filename": "respostas-esperadas-fuvest-2-fase-2026-historia.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/2ª fase/historia/respostas-esperadas-fuvest-2-fase-2026-historia.pdf",
+    "markdownPath": "usp/historia/455dee255474.md",
+    "originalStoragePath": "usp/historia/455dee255474.pdf",
+    "sourceSizeBytes": 780701
   },
   {
     "id": "USP/LINGUÍSTICA/29.12.21_LinC_Cognition_Complexity_Context_T_Givon.pdf",
@@ -3839,6 +4191,17 @@
     "sourceSizeBytes": 6415340
   },
   {
+    "id": "USP/matematica/respostas-esperadas-fuvest-2-fase-2026-matematica.pdf",
+    "institution": "USP",
+    "subject": "matematica",
+    "title": "respostas-esperadas-fuvest-2-fase-2026-matematica",
+    "filename": "respostas-esperadas-fuvest-2-fase-2026-matematica.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/2ª fase/matematica/respostas-esperadas-fuvest-2-fase-2026-matematica.pdf",
+    "markdownPath": "usp/matematica/5a75a400146f.md",
+    "originalStoragePath": "usp/matematica/5a75a400146f.pdf",
+    "sourceSizeBytes": 1071784
+  },
+  {
     "id": "USP/MÁTEMÁTICA/Teorema_de_Pitagoras_JuanLopez.pdf",
     "institution": "USP",
     "subject": "MÁTEMÁTICA",
@@ -3870,6 +4233,17 @@
     "markdownPath": "usp/matematica/43e203b9609f.md",
     "originalStoragePath": "usp/matematica/43e203b9609f.pdf",
     "sourceSizeBytes": 4143154
+  },
+  {
+    "id": "USP/portugues/respostas-esperadas-fuvest-2-fase-2026-portugues.pdf",
+    "institution": "USP",
+    "subject": "portugues",
+    "title": "respostas-esperadas-fuvest-2-fase-2026-portugues",
+    "filename": "respostas-esperadas-fuvest-2-fase-2026-portugues.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/2ª fase/portugues/respostas-esperadas-fuvest-2-fase-2026-portugues.pdf",
+    "markdownPath": "usp/portugues/88b633a5de05.md",
+    "originalStoragePath": "usp/portugues/88b633a5de05.pdf",
+    "sourceSizeBytes": 1515499
   },
   {
     "id": "USP/QUÍMICA/ed_each_9786588503874.pdf",
@@ -3947,6 +4321,17 @@
     "markdownPath": "usp/quimica/2dcd90af88f2.md",
     "originalStoragePath": "usp/quimica/2dcd90af88f2.pdf",
     "sourceSizeBytes": 3702567
+  },
+  {
+    "id": "USP/quimica/respostas-esperadas-fuvest-2-fase-2026-quimica.pdf",
+    "institution": "USP",
+    "subject": "quimica",
+    "title": "respostas-esperadas-fuvest-2-fase-2026-quimica",
+    "filename": "respostas-esperadas-fuvest-2-fase-2026-quimica.pdf",
+    "sourcePath": "Arquivos USP/FUVEST/2026/2ª fase/quimica/respostas-esperadas-fuvest-2-fase-2026-quimica.pdf",
+    "markdownPath": "usp/quimica/b64967253951.md",
+    "originalStoragePath": "usp/quimica/b64967253951.pdf",
+    "sourceSizeBytes": 1247430
   },
   {
     "id": "USP/SOCIOLOGIA/(Re)+Conhecendo+a+USP+–+contribuições+do+ensino,+da+pesquisa+e+da+extensão+no+campo+das+defciências.pdf",
