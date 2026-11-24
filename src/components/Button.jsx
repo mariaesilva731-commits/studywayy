@@ -12,6 +12,7 @@ export default function Button({
   icon,
   style,
   gradientVariant,
+  disabled = false,
 }) {
   const content = (
     <>
@@ -33,7 +34,15 @@ export default function Button({
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.button, style, secondary && styles.buttonSecondary]}
+      disabled={disabled}
+      accessibilityRole="button"
+      accessibilityState={{ disabled }}
+      style={[
+        styles.button,
+        style,
+        secondary && styles.buttonSecondary,
+        disabled && { opacity: 0.55 },
+      ]}
     >
       {!secondary && <GradientSurface variant={gradientVariant} style={styles.gradientFill} />}
       {content}

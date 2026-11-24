@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 2,
   },
-  navItem: { alignItems: "center", width: "20%" },
+  navItem: { alignItems: "center", width: "16.66%" },
   navIcon: {
     width: 29,
     height: 29,

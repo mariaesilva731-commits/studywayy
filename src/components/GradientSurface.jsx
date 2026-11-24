@@ -12,6 +12,8 @@ export default function GradientSurface({
       ? [COLORS.darkBlue, COLORS.darkPurple]
       : variant === "auth"
         ? [COLORS.headerBlue, COLORS.headerPurple]
+        : variant === "pro"
+          ? ["#2563EB", "#7C3AED"]
         : variant === "intro"
           ? ["#7B2FF7", "#353BFF"]
         : variant === "welcome"

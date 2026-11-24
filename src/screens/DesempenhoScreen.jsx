@@ -28,6 +28,10 @@ export default function DesempenhoScreen({ onNavigate, onBack, subjects, activit
           <Text style={styles.performanceNumber}>{overallProgress}%</Text>
           <Text style={styles.cardMuted}>Média de progresso das matérias</Text>
         </View>
+        <Text style={styles.cardMuted}>
+          O progresso inicial é demonstrativo e será atualizado conforme você
+          estuda.
+        </Text>
         <Text style={styles.sectionTitle}>Por matéria</Text>
         {subjects.map((subject) => (
           <ProgressRow

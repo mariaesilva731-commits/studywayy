@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ScrollView,
   View,
@@ -12,7 +12,10 @@ import MainLayout from "../components/MainLayout";
 import ProgressRow from "../components/ProgressRow";
 import GradientSurface from "../components/GradientSurface";
 import { getDailyActivityIds } from "../utils/activityStats";
-import { getDaysUntilNextEnemExam } from "../utils/calculations";
+import {
+  getMonthsUntilNextEnemExam,
+  getNextEnemExamDate,
+} from "../utils/calculations";
 import { createCalendarActivity, getStudyPlan } from "../services/studyService";
 import { COLORS } from "../styles/colors";
 import { styles } from "../styles/globalStyles";
@@ -41,22 +44,37 @@ export default function InicioScreen({
   const [taskDraft, setTaskDraft] = useState("");
   const [addingTask, setAddingTask] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState("");
-  const [newTaskDuration, setNewTaskDuration] = useState("30");
+  const [newTaskDuration, setNewTaskDuration] = useState("");
+  const [newTaskDurationUnit, setNewTaskDurationUnit] = useState("minutes");
   const [newTaskError, setNewTaskError] = useState("");
-  const [daysUntilExam, setDaysUntilExam] = useState(() =>
-    getDaysUntilNextEnemExam(),
+  const studyPlanRequest = useRef(0);
+  const [monthsUntilExam, setMonthsUntilExam] = useState(() =>
+    getMonthsUntilNextEnemExam(),
   );
+  const nextEnemExamDate = getNextEnemExamDate();
+  function formatDuration(durationMinutes) {
+    if (durationMinutes >= 60 && durationMinutes % 60 === 0) {
+      return `${durationMinutes / 60} h`;
+    }
+    if (durationMinutes > 60) {
+      return `${Math.floor(durationMinutes / 60)} h ${durationMinutes % 60} min`;
+    }
+    return `${durationMinutes} min`;
+  }
   useEffect(() => {
     const timer = setInterval(() => {
-      setDaysUntilExam(getDaysUntilNextEnemExam());
-    }, 60000);
+      setMonthsUntilExam(getMonthsUntilNextEnemExam());
+    }, 86400000);
     return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
     let active = true;
+    const requestId = ++studyPlanRequest.current;
     getStudyPlan().then(({ data, error }) => {
-      if (!active || error || !data) return;
+      if (!active || requestId !== studyPlanRequest.current) return;
+      if (error) console.error("Could not load the study plan.", error);
+      if (!data) return;
       setDailyTasks(data);
       setSelectedTasks(
         data.filter((task) => task.is_completed).map((task) => task.task_key),
@@ -95,13 +113,25 @@ export default function InicioScreen({
 
   async function addTask() {
     const title = newTaskTitle.trim();
-    const duration = Number(newTaskDuration);
+    const enteredDuration = Number(newTaskDuration.replace(",", "."));
+    const duration =
+      newTaskDurationUnit === "hours"
+        ? enteredDuration * 60
+        : enteredDuration;
     if (!title) {
       setNewTaskError("Informe o nome da tarefa.");
       return;
     }
-    if (!Number.isInteger(duration) || duration < 1 || duration > 1440) {
-      setNewTaskError("Informe uma duração entre 1 e 1440 minutos.");
+    if (
+      !Number.isInteger(duration) ||
+      duration < 1 ||
+      duration > 1440
+    ) {
+      setNewTaskError(
+        newTaskDurationUnit === "hours"
+          ? "Informe um tempo entre 1 minuto e 24 horas."
+          : "Informe um tempo entre 1 e 1440 minutos.",
+      );
       return;
     }
 
@@ -121,6 +151,7 @@ export default function InicioScreen({
     }
 
     const activity = result.data;
+    studyPlanRequest.current += 1;
     setDailyTasks((current) => [
       ...current,
       {
@@ -134,7 +165,8 @@ export default function InicioScreen({
       },
     ]);
     setNewTaskTitle("");
-    setNewTaskDuration("30");
+    setNewTaskDuration("");
+    setNewTaskDurationUnit("minutes");
     setNewTaskError("");
     setAddingTask(false);
   }
@@ -166,7 +198,8 @@ export default function InicioScreen({
               accessibilityRole="button"
               onPress={() => {
                 setNewTaskTitle("");
-                setNewTaskDuration("30");
+                setNewTaskDuration("");
+                setNewTaskDurationUnit("minutes");
                 setNewTaskError("");
                 setAddingTask(true);
               }}
@@ -218,7 +251,9 @@ export default function InicioScreen({
                 {task.title}
               </Text>
             </View>
-            <Text style={styles.taskDuration}>{task.duration_minutes} min</Text>
+            <Text style={styles.taskDuration}>
+              {formatDuration(task.duration_minutes)}
+            </Text>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={`Editar tarefa: ${task.title}`}
@@ -291,16 +326,61 @@ export default function InicioScreen({
                 returnKeyType="done"
                 onSubmitEditing={addTask}
               />
+              <Text style={styles.taskDurationLabel}>
+                Tempo de estudo
+              </Text>
+              <View style={styles.taskDurationUnits}>
+                {[
+                  ["minutes", "Minutos"],
+                  ["hours", "Horas"],
+                ].map(([unit, label]) => (
+                  <Pressable
+                    key={unit}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: newTaskDurationUnit === unit }}
+                    onPress={() => {
+                      setNewTaskDuration("");
+                      setNewTaskDurationUnit(unit);
+                      setNewTaskError("");
+                    }}
+                    style={[
+                      styles.taskDurationUnit,
+                      newTaskDurationUnit === unit &&
+                        styles.taskDurationUnitActive,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.taskDurationUnitText,
+                        newTaskDurationUnit === unit &&
+                          styles.taskDurationUnitTextActive,
+                      ]}
+                    >
+                      {label}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
               <TextInput
                 value={newTaskDuration}
                 onChangeText={(value) => {
-                  setNewTaskDuration(value.replace(/\D/g, ""));
+                  setNewTaskDuration(
+                    newTaskDurationUnit === "hours"
+                      ? value.replace(/[^\d,.]/g, "")
+                      : value.replace(/\D/g, ""),
+                  );
                   setNewTaskError("");
                 }}
-                placeholder="Duração em minutos"
+                placeholder={
+                  newTaskDurationUnit === "hours" ? "Ex.: 1,5" : "Ex.: 30"
+                }
                 placeholderTextColor={COLORS.muted}
-                keyboardType="number-pad"
-                style={[styles.taskEditorInput, styles.addTaskDurationInput]}
+                keyboardType={
+                  newTaskDurationUnit === "hours"
+                    ? "decimal-pad"
+                    : "number-pad"
+                }
+                style={styles.taskEditorInput}
               />
               {newTaskError ? (
                 <Text style={styles.taskEditorError}>{newTaskError}</Text>
@@ -365,15 +445,21 @@ export default function InicioScreen({
         <GradientSurface variant="dark" style={styles.nextExamCard}>
           <View style={styles.flexFill}>
             <Text style={styles.nextExamLabel}>PRÓXIMA PROVA</Text>
-            <Text style={styles.nextExamTitle}>ENEM 2026</Text>
-            <Text style={styles.nextExamDate}>8 e 15 de novembro de 2026</Text>
+            <Text style={styles.nextExamTitle}>
+              ENEM {nextEnemExamDate.getFullYear()}
+            </Text>
+            <Text style={styles.nextExamDate}>
+              Previsão: novembro de {nextEnemExamDate.getFullYear()}
+            </Text>
             <Text style={styles.nextExamProgress}>
               0% do cronograma concluído
             </Text>
           </View>
           <View style={styles.nextExamDays}>
-            <Text style={styles.nextExamNumber}>{daysUntilExam}</Text>
-            <Text style={styles.nextExamDaysLabel}>dias restantes</Text>
+            <Text style={styles.nextExamNumber}>{monthsUntilExam}</Text>
+            <Text style={styles.nextExamDaysLabel}>
+              {monthsUntilExam === 1 ? "mês restante" : "meses restantes"}
+            </Text>
           </View>
         </GradientSurface>
       </ScrollView>

@@ -1,5 +1,10 @@
 import { supabase } from "./supabase";
 import { calculateProgress } from "../utils/calculations";
+import { subjects as demoSubjects } from "../data/subjects";
+
+const demoSubjectByName = new Map(
+  demoSubjects.map((subject) => [subject.name, subject]),
+);
 
 export async function getSubjects(userId) {
   const { data: subjectRows, error } = await supabase
@@ -11,8 +16,9 @@ export async function getSubjects(userId) {
     return {
       data: subjectRows.map((subject) => ({
         ...subject,
-        completed: 0,
-        progress: calculateProgress(0, subject.total),
+        completed: demoSubjectByName.get(subject.name)?.completed || 0,
+        total: demoSubjectByName.get(subject.name)?.total || subject.total,
+        progress: demoSubjectByName.get(subject.name)?.progress || 0,
       })),
       error: null,
     };
@@ -33,11 +39,15 @@ export async function getSubjects(userId) {
 
   return {
     data: subjectRows.map((subject) => {
-      const completed = completedBySubject[subject.name] || 0;
+      const demoSubject = demoSubjectByName.get(subject.name);
+      const completed =
+        (demoSubject?.completed || 0) + (completedBySubject[subject.name] || 0);
+      const total = demoSubject?.total || subject.total;
       return {
         ...subject,
         completed,
-        progress: calculateProgress(completed, subject.total),
+        total,
+        progress: calculateProgress(completed, total),
       };
     }),
     error: null,

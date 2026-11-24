@@ -1,12 +1,12 @@
 import { calculateProgress } from "../utils/calculations";
 
 const subjectProgress = [
-  { name: "Matemática", completed: 0, total: 6, icon: "calculator-outline" },
-  { name: "Português", completed: 0, total: 25, icon: "book-outline" },
-  { name: "História", completed: 0, total: 18, icon: "time-outline" },
-  { name: "Geografia", completed: 0, total: 3, icon: "earth-outline" },
-  { name: "Biologia", completed: 0, total: 24, icon: "leaf-outline" },
-  { name: "Química", completed: 0, total: 25, icon: "flask-outline" },
+  { name: "Matemática", completed: 8, total: 24, icon: "calculator-outline" },
+  { name: "Português", completed: 11, total: 28, icon: "book-outline" },
+  { name: "História", completed: 6, total: 20, icon: "time-outline" },
+  { name: "Geografia", completed: 7, total: 20, icon: "earth-outline" },
+  { name: "Biologia", completed: 9, total: 24, icon: "leaf-outline" },
+  { name: "Química", completed: 5, total: 20, icon: "flask-outline" },
 ];
 
 export const subjects = subjectProgress.map((subject) => ({

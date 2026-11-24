@@ -15,12 +15,30 @@ project's API settings. Restart Expo after changing `.env`.
 3. Run its contents in the SQL Editor.
 4. Confirm the `studyway_*` tables appear in **Table Editor**.
 
-Run both migrations in `supabase/migrations` in timestamp order. The first
-creates the profile, subject catalog, daily task, activity, calendar,
-simulation, question, and preference tables. The second creates the public
-material catalog and the `studyway-materials` Storage bucket. It permits public
-read access to study materials; only the server-side import script should write
-to this bucket and table.
+Run the migrations in `supabase/migrations` in timestamp order. They create
+the profile, subject catalog, daily task, activity, calendar, simulation,
+question, preference, material, and subscription tables. The material
+migration creates the `studyway-materials` Storage bucket and permits public
+read access to study materials; only the server-side import script should
+write to the material bucket and table.
+
+The `studyway_subscriptions` table is read-only to the signed-in app user.
+Only a trusted server-side payment webhook should write verified subscription
+status and its current-period end date. The app grants PRO only while that
+server-written status is `active` and the current period has not ended. Never
+grant PRO from a checkout redirect or a client-side payment result.
+
+## Payment checkout integration
+
+The monthly and annual buttons call the `studyway-create-checkout` Supabase
+Edge Function only when `EXPO_PUBLIC_STUDYWAY_CHECKOUT_ENABLED=true`; by
+default checkout stays disabled and no payment is attempted. Implement the
+function to authenticate the caller, map the requested plan to server-side
+gateway price IDs, and return an HTTPS `checkoutUrl`. Configure gateway
+credentials only as Edge Function secrets, never in Expo environment
+variables. A verified gateway webhook must update
+`studyway_subscriptions`; after the customer returns to the app, its
+subscription status is refreshed from that table.
 
 ## Authentication
 
@@ -54,7 +72,7 @@ files.
 
 To publish Markdown and metadata to the existing Supabase project, copy
 `.env.example` to `.env`, set `SUPABASE_SERVICE_ROLE_KEY` to the projectâ€™s
-service-role secret, apply both migrations, then run:
+service-role secret, apply all migrations, then run:
 
 ```powershell
 npm run upload:materials
@@ -84,4 +102,3 @@ with scanned pages are marked for review because OCR is not installed in the
 conversion environment. Pages containing images are also marked for review;
 those visuals stay available in the original PDF when originals have been
 uploaded.
-

@@ -7,8 +7,10 @@ import GradientSurface from "../components/GradientSurface";
 import { COLORS } from "../styles/colors";
 import { FONTS } from "../styles/fonts";
 import { styles } from "../styles/globalStyles";
-import { pdfMaterials } from "../data/pdfCatalog.generated";
-import { getMaterials } from "../services/materialService";
+import {
+  getFreeMaterials,
+  getMaterials,
+} from "../services/materialService";
 import { getPdfDisplayName, getPdfDisplaySubtitle } from "../utils/pdfDisplayNames";
 
 const contentTitleStyles = StyleSheet.create({
@@ -17,19 +19,24 @@ const contentTitleStyles = StyleSheet.create({
   text: { fontFamily: FONTS.regular },
 });
 
-export default function ConteudosScreen({ onNavigate, onBack, subjects }) {
+export default function ConteudosScreen({
+  onNavigate,
+  onBack,
+  subjects,
+  isPro = false,
+}) {
   const [search, setSearch] = useState("");
   const [institution, setInstitution] = useState("ENEM");
   const [selectedSubject, setSelectedSubject] = useState("Todas");
   const [materials, setMaterials] = useState(() =>
-    pdfMaterials.filter((material) => material.institution === "ENEM"),
+    getFreeMaterials("ENEM"),
   );
   const [isLoadingMaterials, setIsLoadingMaterials] = useState(false);
 
   useEffect(() => {
     let active = true;
     setIsLoadingMaterials(true);
-    getMaterials(institution).then(({ data }) => {
+    getMaterials(institution, isPro).then(({ data }) => {
       if (active) setMaterials(data || []);
     }).finally(() => {
       if (active) setIsLoadingMaterials(false);
@@ -37,7 +44,7 @@ export default function ConteudosScreen({ onNavigate, onBack, subjects }) {
     return () => {
       active = false;
     };
-  }, [institution]);
+  }, [institution, isPro]);
 
   const availableSubjects = [
     "Todas",
@@ -136,6 +143,12 @@ export default function ConteudosScreen({ onNavigate, onBack, subjects }) {
         <Text style={[styles.sectionTitle, contentTitleStyles.section, contentTitleStyles.text]}>
           Materiais ({visibleMaterials.length})
         </Text>
+        {!isPro ? (
+          <Text style={[styles.cardMuted, contentTitleStyles.text]}>
+            Conteúdo gratuito: até 2 materiais por matéria. A biblioteca
+            completa está disponível no StudyWay PRO.
+          </Text>
+        ) : null}
         {isLoadingMaterials && (
           <Text style={[styles.cardMuted, contentTitleStyles.text]}>Carregando materiais...</Text>
         )}

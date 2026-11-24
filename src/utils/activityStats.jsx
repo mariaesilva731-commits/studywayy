@@ -1,16 +1,55 @@
 const STORAGE_KEY = "studyway:activity-stats";
 
+function createDemoActivityStats(today = new Date()) {
+  const activities = [];
+  const taskCompletions = [];
+  const subjects = [
+    "Matemática",
+    "Português",
+    "História",
+    "Geografia",
+    "Biologia",
+    "Química",
+  ];
+
+  for (let offset = 6; offset >= 0; offset -= 1) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - offset);
+    const day = localDateKey(date);
+    const dailyCount = [1, 2, 1, 3, 2, 1, 2][6 - offset];
+
+    for (let index = 0; index < dailyCount; index += 1) {
+      activities.push({
+        id: `${day}:demo-study-${index}`,
+        day,
+      });
+    }
+
+    const subject = subjects[(6 - offset) % subjects.length];
+    taskCompletions.push({
+      id: `${day}:demo-task-${6 - offset}`,
+      day,
+      subject,
+    });
+  }
+
+  return { activities, taskCompletions, demo: true };
+}
+
 export function getInitialActivityStats() {
-  if (typeof localStorage === "undefined") return { activities: [] };
+  if (typeof localStorage === "undefined") return createDemoActivityStats();
 
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     const parsed = saved ? JSON.parse(saved) : null;
-    return parsed && Array.isArray(parsed.activities)
+    return parsed &&
+      Array.isArray(parsed.activities) &&
+      (parsed.activities.length ||
+        (Array.isArray(parsed.taskCompletions) && parsed.taskCompletions.length))
       ? parsed
-      : { activities: [] };
+      : createDemoActivityStats();
   } catch {
-    return { activities: [] };
+    return createDemoActivityStats();
   }
 }
 
@@ -68,13 +107,18 @@ export function getWeeklyActivityCounts(stats, today = new Date()) {
 }
 
 export function recordActivity(stats, activityId, date = new Date()) {
+  const currentStats = stats.demo
+    ? { activities: [], taskCompletions: [], demo: false }
+    : stats;
   const day = localDateKey(date);
   const uniqueId = `${day}:${activityId}`;
-  if (stats.activities.some((activity) => activity.id === uniqueId)) return stats;
+  if (currentStats.activities.some((activity) => activity.id === uniqueId)) {
+    return currentStats;
+  }
 
   return {
-    ...stats,
-    activities: [...stats.activities, { id: uniqueId, day }],
+    ...currentStats,
+    activities: [...currentStats.activities, { id: uniqueId, day }],
   };
 }
 
@@ -85,15 +129,20 @@ export function setTaskCompletion(
   subject,
   date = new Date(),
 ) {
+  const currentStats = stats.demo
+    ? { activities: [], taskCompletions: [], demo: false }
+    : stats;
   const day = localDateKey(date);
   const taskId = String(taskKey).startsWith("task-") ||
     String(taskKey).startsWith("calendar-")
     ? String(taskKey)
     : `task-${taskKey}`;
   const uniqueId = `${day}:${taskId}`;
-  const taskCompletions = (stats.taskCompletions || stats.activities)
+  const taskCompletions = (currentStats.taskCompletions || currentStats.activities)
     .filter((activity) => activity.id !== uniqueId);
-  const nextStats = completed ? recordActivity(stats, taskId, date) : stats;
+  const nextStats = completed
+    ? recordActivity(currentStats, taskId, date)
+    : currentStats;
 
   return {
     ...nextStats,

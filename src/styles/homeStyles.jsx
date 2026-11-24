@@ -257,7 +257,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     color: COLORS.text,
   },
-  addTaskDurationInput: { marginTop: 10 },
+  taskDurationLabel: {
+    color: COLORS.text,
+    fontSize: 13,
+    fontWeight: "700",
+    marginTop: 10,
+    marginBottom: 6,
+  },
+  taskDurationUnits: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 8,
+  },
+  taskDurationUnit: {
+    borderWidth: 1,
+    borderColor: "#C9DCF3",
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+  },
+  taskDurationUnitActive: {
+    borderColor: COLORS.blue2,
+    backgroundColor: "#EAF1FF",
+  },
+  taskDurationUnitText: {
+    color: COLORS.muted,
+    fontSize: 12,
+    fontWeight: "700",
+  },
+  taskDurationUnitTextActive: {
+    color: COLORS.blue2,
+  },
+  taskEditorNotice: {
+    color: COLORS.muted,
+    fontSize: 12,
+    marginTop: 4,
+    marginBottom: 8,
+  },
   taskEditorError: {
     color: "#B42318",
     fontSize: 12,

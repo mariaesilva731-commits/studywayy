@@ -1,10 +1,10 @@
 import React from "react";
-import { ScrollView, View, Text } from "react-native";
+import { Platform, ScrollView, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { WebView } from "react-native-webview";
 import MainLayout from "../components/MainLayout";
 import Header from "../components/Header";
 import Button from "../components/Button";
-import GradientSurface from "../components/GradientSurface";
 import { COLORS } from "../styles/colors";
 import { styles } from "../styles/globalStyles";
 export default function AulaScreen({ onNavigate, onBack }) {
@@ -20,10 +20,26 @@ export default function AulaScreen({ onNavigate, onBack }) {
       }
     >
       <ScrollView contentContainerStyle={styles.mainScroll}>
-        <GradientSurface variant="dark" style={styles.videoBox}>
-          <Ionicons name="play-circle" size={68} color={COLORS.white} />
-          <Text style={styles.videoText}>Aula em vídeo</Text>
-        </GradientSurface>
+        <View style={styles.lessonVideoFrame}>
+          {Platform.OS === "web" ? (
+            <iframe
+              title="Videoaula de função afim"
+              src="https://www.youtube-nocookie.com/embed/4OVttqaXJ1w"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{ width: "100%", height: "100%", border: 0 }}
+            />
+          ) : (
+            <WebView
+              source={{
+                uri: "https://www.youtube-nocookie.com/embed/4OVttqaXJ1w",
+              }}
+              allowsFullscreenVideo
+              style={styles.lessonNativeVideo}
+            />
+          )}
+        </View>
+        <Text style={styles.videoText}>Videoaula • Khan Academy Brasil</Text>
         <Text style={styles.sectionTitle}>Função do 1º grau</Text>
         <Text style={styles.paragraph}>
           Nesta aula você vai revisar os principais conceitos, aprender a

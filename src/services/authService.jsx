@@ -10,6 +10,25 @@ function translateAuthError(error) {
   if (/email not confirmed/i.test(message)) {
     return { ...error, message: "Confirme seu e-mail antes de entrar." };
   }
+  if (/user already registered/i.test(message)) {
+    return { ...error, message: "Já existe uma conta cadastrada com esse e-mail." };
+  }
+  if (/password should be at least (\d+) characters/i.test(message)) {
+    const minimumLength = message.match(/at least (\d+) characters/i)?.[1];
+    return {
+      ...error,
+      message: `A senha precisa ter pelo menos ${minimumLength} caracteres.`,
+    };
+  }
+  if (/email address is invalid|invalid email/i.test(message)) {
+    return { ...error, message: "Informe um endereço de e-mail válido." };
+  }
+  if (/email rate limit exceeded|rate limit/i.test(message)) {
+    return {
+      ...error,
+      message: "Muitas tentativas em pouco tempo. Aguarde e tente novamente.",
+    };
+  }
   if (/failed to fetch|network/i.test(message)) {
     return { ...error, message: "Não foi possível conectar ao servidor. Verifique sua internet." };
   }

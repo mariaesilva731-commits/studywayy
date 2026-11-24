@@ -7,6 +7,8 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const pdfRoot = path.join(root, "PDF's");
 const catalogPath = path.join(root, "src", "data", "pdfCatalog.generated.json");
+const pdfViewerPath = path.join(root, "scripts", "pdf-viewer.html");
+const pdfJsBuildPath = path.join(root, "node_modules", "pdfjs-dist", "build");
 const port = Number(process.env.LOCAL_PDF_PORT) || 4317;
 const catalog = JSON.parse(await readFile(catalogPath, "utf8"));
 const allowedPdfPaths = new Set(catalog.map((material) => material.sourcePath));
@@ -21,8 +23,28 @@ function sendError(response, statusCode, message) {
   response.end(body);
 }
 
+async function serveStaticFile(response, filePath, contentType, method) {
+  try {
+    const body = await readFile(filePath);
+    response.writeHead(200, {
+      "Content-Type": contentType,
+      "Content-Length": body.length,
+      "Cache-Control": "no-cache",
+      "X-Content-Type-Options": "nosniff",
+    });
+    response.end(method === "HEAD" ? undefined : body);
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      sendError(response, 500, "Não foi possível carregar o visualizador do PDF.");
+      return;
+    }
+    sendError(response, 404, "Visualizador do PDF não encontrado.");
+  }
+}
+
 const server = createServer(async (request, response) => {
   const requestUrl = new URL(request.url || "/", "http://localhost");
+  const method = request.method || "";
   if (requestUrl.pathname === "/health") {
     const body = JSON.stringify({ status: "ok", pdfCount: allowedPdfPaths.size });
     response.writeHead(200, {
@@ -34,8 +56,32 @@ const server = createServer(async (request, response) => {
     return;
   }
 
-  if (requestUrl.pathname !== "/pdf" || !["GET", "HEAD"].includes(request.method || "")) {
-    sendError(response, request.method === "GET" || request.method === "HEAD" ? 404 : 405, "PDF não encontrado.");
+  if (!["GET", "HEAD"].includes(method)) {
+    sendError(response, 405, "Método não permitido.");
+    return;
+  }
+
+  if (requestUrl.pathname === "/viewer") {
+    await serveStaticFile(response, pdfViewerPath, "text/html; charset=utf-8", method);
+    return;
+  }
+
+  const pdfJsFiles = {
+    "/pdfjs/pdf.mjs": "pdf.mjs",
+    "/pdfjs/pdf.worker.mjs": "pdf.worker.mjs",
+  };
+  if (pdfJsFiles[requestUrl.pathname]) {
+    await serveStaticFile(
+      response,
+      path.join(pdfJsBuildPath, pdfJsFiles[requestUrl.pathname]),
+      "text/javascript; charset=utf-8",
+      method,
+    );
+    return;
+  }
+
+  if (requestUrl.pathname !== "/pdf") {
+    sendError(response, 404, "PDF não encontrado.");
     return;
   }
 
@@ -103,7 +149,7 @@ const server = createServer(async (request, response) => {
 
   headers["Content-Length"] = end - start + 1;
   response.writeHead(statusCode, headers);
-  if (request.method === "HEAD") {
+  if (method === "HEAD") {
     response.end();
     return;
   }

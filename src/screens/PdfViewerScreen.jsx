@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Linking, Platform, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Platform,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
+import { WebView } from "react-native-webview";
 import MainLayout from "../components/MainLayout";
 import Header from "../components/Header";
 import { getMaterialDetails } from "../services/materialService";
@@ -7,17 +14,6 @@ import { getPdfDisplayName } from "../utils/pdfDisplayNames";
 import { getExamDisplayName, getExamDisplaySubtitle } from "../utils/examDisplayNames";
 import { COLORS } from "../styles/colors";
 import { styles } from "../styles/globalStyles";
-
-const buttonStyle = {
-  alignSelf: "flex-start",
-  backgroundColor: COLORS.blue2,
-  borderRadius: 7,
-  marginTop: 16,
-  paddingHorizontal: 15,
-  paddingVertical: 11,
-};
-
-const buttonTextStyle = { color: COLORS.white, fontWeight: "700" };
 
 export default function PdfViewerScreen({ materialId, onBack }) {
   const [material, setMaterial] = useState(null);
@@ -35,7 +31,7 @@ export default function PdfViewerScreen({ materialId, onBack }) {
       setMaterial(data);
       if (!data) {
         setLoadError("Material não encontrado no catálogo local.");
-      } else if (!data.originalPdfUrl) {
+      } else if (!data.viewerUrl) {
         setLoadError("Não foi possível localizar o servidor de PDFs locais. Inicie o app com npm run web ou npm start.");
       }
       setIsLoading(false);
@@ -50,11 +46,6 @@ export default function PdfViewerScreen({ materialId, onBack }) {
     };
   }, [materialId]);
 
-  async function openOriginalPdf() {
-    if (!material?.originalPdfUrl) return;
-    await Linking.openURL(material.originalPdfUrl);
-  }
-
   const headerTitle = material
     ? getExamDisplayName(material) || getPdfDisplayName(material)
     : "PDF";
@@ -66,14 +57,21 @@ export default function PdfViewerScreen({ materialId, onBack }) {
     <MainLayout
       header={<Header title={headerTitle} subtitle={headerSubtitle} onBack={onBack} />}
     >
-      <View style={{ flex: 1, minHeight: 0, backgroundColor: COLORS.white }}>
+      <View
+        style={{
+          flex: 1,
+          minHeight: 0,
+          position: "relative",
+          backgroundColor: COLORS.white,
+        }}
+      >
         {isLoading ? (
           <ActivityIndicator
             accessibilityLabel="Carregando PDF local"
             color={COLORS.blue2}
             style={{ flex: 1 }}
           />
-        ) : !material?.originalPdfUrl ? (
+        ) : !material?.viewerUrl ? (
           <ScrollView contentContainerStyle={{ padding: 24 }}>
             <Text style={[styles.emptyActivities, { textAlign: "left" }]}>
               {loadError || "O PDF local não está disponível."}
@@ -82,18 +80,37 @@ export default function PdfViewerScreen({ materialId, onBack }) {
         ) : Platform.OS === "web" ? (
           <iframe
             title={headerTitle}
-            src={material.originalPdfUrl}
-            style={{ width: "100%", height: "100%", minHeight: 400, border: 0, flex: 1 }}
+            src={material.viewerUrl}
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              display: "block",
+              width: "100%",
+              height: "100%",
+              border: 0,
+            }}
           />
         ) : (
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 24 }}>
-            <Text style={[styles.emptyActivities, { textAlign: "center" }]}>
-              Abra o PDF local para visualizar o documento completo.
-            </Text>
-            <Pressable accessibilityRole="link" onPress={openOriginalPdf} style={buttonStyle}>
-              <Text style={buttonTextStyle}>Abrir PDF</Text>
-            </Pressable>
-          </View>
+          <WebView
+            source={{ uri: material.viewerUrl }}
+            javaScriptEnabled
+            originWhitelist={["*"]}
+            style={{ flex: 1, backgroundColor: COLORS.white }}
+            onError={(event) => {
+              setLoadError(
+                event.nativeEvent.description ||
+                  "Não foi possível carregar o visualizador do PDF.",
+              );
+            }}
+            onHttpError={(event) => {
+              setLoadError(
+                `O visualizador do PDF respondeu com erro ${event.nativeEvent.statusCode}.`,
+              );
+            }}
+          />
         )}
       </View>
     </MainLayout>

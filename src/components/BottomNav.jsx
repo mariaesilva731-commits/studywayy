@@ -10,6 +10,7 @@ const items = [
   ["calendar", "Agenda", "calendar-outline"],
   ["performance", "Desempenho", "stats-chart-outline"],
   ["profile", "Perfil", "person-outline"],
+  ["pro", "PRO", "sparkles-outline"],
 ];
 export default function BottomNav({ tab, onNavigate }) {
   return (

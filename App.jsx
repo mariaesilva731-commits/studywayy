@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { AppState } from "react-native";
 import AppNavigation from "./src/navigation/AppNavigation";
 import {
   getInitialActivityStats,
@@ -10,6 +11,7 @@ import { getSubjectsWithProgress } from "./src/data/subjects";
 import { supabase } from "./src/services/supabase";
 import { getSubjects } from "./src/services/contentService";
 import { getUserProfile, updateUserProfile } from "./src/services/userService";
+import { getProAccess } from "./src/services/proAccessService";
 import {
   getStudyActivityStats,
   recordStudyActivity,
@@ -25,10 +27,48 @@ export default function App() {
   const [institution, setInstitution] = useState("ENEM");
   const [activityStats, setActivityStats] = useState(getInitialActivityStats);
   const [user, setUser] = useState(null);
+  const [isPro, setIsPro] = useState(false);
+  const [isProDemo, setIsProDemo] = useState(false);
+  const [proDemoPlan, setProDemoPlan] = useState(null);
+  const [isProLoading, setIsProLoading] = useState(true);
+  const [proSubscription, setProSubscription] = useState(null);
   const [remoteSubjects, setRemoteSubjects] = useState(null);
   const [profile, setProfile] = useState(null);
   const subjects = remoteSubjects || getSubjectsWithProgress(activityStats);
   const currentRoute = routeStack[routeStack.length - 1];
+
+  useEffect(() => {
+    let active = true;
+    if (!user) {
+      setIsPro(false);
+      setProSubscription(null);
+      setIsProLoading(false);
+      return () => {
+        active = false;
+      };
+    }
+
+    setIsProLoading(true);
+    getProAccess(user.id).then(
+      ({ data, error }) => {
+        if (!active) return;
+        setIsPro(data.isPro);
+        setProSubscription(data.subscription);
+        if (error) console.error("Could not load StudyWay PRO status.", error);
+        setIsProLoading(false);
+      },
+      (error) => {
+        if (!active) return;
+        setIsPro(false);
+        setProSubscription(null);
+        console.error("Could not load StudyWay PRO status.", error);
+        setIsProLoading(false);
+      },
+    );
+    return () => {
+      active = false;
+    };
+  }, [user]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -40,6 +80,29 @@ export default function App() {
     });
     return () => data.subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!user) return undefined;
+    const appStateSubscription = AppState.addEventListener(
+      "change",
+      (nextState) => {
+        if (nextState !== "active") return;
+        getProAccess(user.id).then(
+          ({ data, error }) => {
+            setIsPro(data.isPro);
+            setProSubscription(data.subscription);
+            if (error) console.error("Could not refresh StudyWay PRO status.", error);
+          },
+          (error) => {
+            setIsPro(false);
+            setProSubscription(null);
+            console.error("Could not refresh StudyWay PRO status.", error);
+          },
+        );
+      },
+    );
+    return () => appStateSubscription.remove();
+  }, [user]);
 
   useEffect(() => {
     if (!user) {
@@ -56,7 +119,15 @@ export default function App() {
       if (active && !error && data) setProfile(data);
     });
     getStudyActivityStats(user.id).then(({ data, error }) => {
-      if (active && !error && data) setActivityStats(data);
+      if (active && !error && data) {
+        setActivityStats((current) =>
+          current.demo &&
+          data.activities.length === 0 &&
+          data.taskCompletions.length === 0
+            ? current
+            : data,
+        );
+      }
     });
     return () => {
       active = false;
@@ -107,8 +178,6 @@ export default function App() {
     setActivityStats((current) =>
       setTaskCompletion(current, taskKey, completed, task.subject),
     );
-    if (!user && task.source !== "calendar") return;
-
     const result =
       task.source === "calendar"
         ? await updateCalendarActivityCompletion(task.id, completed)
@@ -129,6 +198,12 @@ export default function App() {
     return result;
   }
 
+  async function onSubscribe(planId) {
+    setProDemoPlan(planId);
+    setIsProDemo(true);
+    return { data: { prototype: true }, error: null };
+  }
+
   return (
     <AppNavigation
       screen={currentRoute.screen}
@@ -143,9 +218,17 @@ export default function App() {
       subjects={subjects}
       profile={profile}
       authenticated={Boolean(user)}
+      isPro={isPro || isProDemo}
+      isProDemo={isProDemo && !isPro}
+      isProLoading={isProLoading}
+      subscription={proSubscription}
+      proDemoPlan={proDemoPlan}
+      onSubscribe={onSubscribe}
       onProfileUpdate={onProfileUpdate}
       onSignOut={async () => {
         await supabase.auth.signOut();
+        setIsProDemo(false);
+        setProDemoPlan(null);
         setRemoteSubjects(null);
         navigate("login", {}, { reset: true });
       }}

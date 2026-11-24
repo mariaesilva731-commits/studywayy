@@ -20,25 +20,28 @@ export function calculateAverageProgress(items) {
   return Math.round(totalProgress / items.length);
 }
 
-export function getDaysUntilNextEnemExam(today = new Date()) {
-  const examDates = [new Date(2026, 10, 8), new Date(2026, 10, 15)];
-  const todayUtc = Date.UTC(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-  );
+export function getNextEnemExamDate(today = new Date()) {
+  let year = today.getFullYear();
+  let examDate = new Date(year, 10, 1);
+  examDate.setDate(examDate.getDate() + ((7 - examDate.getDay()) % 7));
 
-  const remainingDays = examDates
-    .map((examDate) =>
-      Math.ceil(
-        (Date.UTC(
-          examDate.getFullYear(),
-          examDate.getMonth(),
-          examDate.getDate(),
-        ) - todayUtc) / 86400000,
-      ),
-    )
-    .filter((days) => days >= 0);
+  const todayUtc = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+  if (Date.UTC(year, examDate.getMonth(), examDate.getDate()) < todayUtc) {
+    year += 1;
+    examDate = new Date(year, 10, 1);
+    examDate.setDate(examDate.getDate() + ((7 - examDate.getDay()) % 7));
+  }
 
-  return remainingDays.length ? Math.min(...remainingDays) : 0;
+  return examDate;
+}
+
+export function getMonthsUntilNextEnemExam(today = new Date()) {
+  const examDate = getNextEnemExamDate(today);
+  let months =
+    (examDate.getFullYear() - today.getFullYear()) * 12 +
+    examDate.getMonth() -
+    today.getMonth();
+
+  if (examDate.getDate() < today.getDate()) months -= 1;
+  return Math.max(0, months);
 }

@@ -18,6 +18,7 @@ import PerfilScreen from "../screens/PerfilScreen";
 import ConfiguracoesScreen from "../screens/ConfiguracoesScreen";
 import AjudaScreen from "../screens/AjudaScreen";
 import PdfViewerScreen from "../screens/PdfViewerScreen";
+import ProScreen from "../screens/ProScreen";
 import {
   resetPasswordForEmail,
   signIn,
@@ -37,6 +38,12 @@ export default function AppNavigation({
   subjects,
   profile,
   authenticated,
+  isPro,
+  isProDemo,
+  isProLoading,
+  subscription,
+  proDemoPlan,
+  onSubscribe,
   onProfileUpdate,
   onStudyActivity,
   onTaskCompletion,
@@ -146,6 +153,7 @@ export default function AppNavigation({
         onNavigate={navigate}
         onBack={back}
         subjects={subjects}
+        isPro={isPro}
       />
     );
   if (screen === "pdfViewer")
@@ -165,14 +173,40 @@ export default function AppNavigation({
       />
     );
   if (screen === "lesson")
-    return <AulaScreen onNavigate={navigate} onBack={back} />;
+    return isPro ? (
+      <AulaScreen onNavigate={navigate} onBack={back} />
+    ) : (
+      <ProScreen
+        isPro={isPro}
+        isProDemo={isProDemo}
+        isProLoading={isProLoading}
+        subscription={subscription}
+        proDemoPlan={proDemoPlan}
+        onSubscribe={onSubscribe}
+        onNavigate={navigate}
+        onBack={back}
+        onStudyActivity={onStudyActivity}
+      />
+    );
   if (screen === "exercise")
-    return (
+    return isPro ? (
       <ExerciciosScreen
         onNavigate={navigate}
         onBack={back}
         onStudyActivity={onStudyActivity}
         simulationId={routeParams?.simulationId}
+      />
+    ) : (
+      <ProScreen
+        isPro={isPro}
+        isProDemo={isProDemo}
+        isProLoading={isProLoading}
+        subscription={subscription}
+        proDemoPlan={proDemoPlan}
+        onSubscribe={onSubscribe}
+        onNavigate={navigate}
+        onBack={back}
+        onStudyActivity={onStudyActivity}
       />
     );
   if (screen === "provas")
@@ -206,6 +240,20 @@ export default function AppNavigation({
       />
     );
   if (screen === "help") return <AjudaScreen onBack={back} />;
+  if (screen === "pro")
+    return (
+      <ProScreen
+        isPro={isPro}
+        isProDemo={isProDemo}
+        isProLoading={isProLoading}
+        subscription={subscription}
+        proDemoPlan={proDemoPlan}
+        onSubscribe={onSubscribe}
+        onNavigate={navigate}
+        onBack={back}
+        onStudyActivity={onStudyActivity}
+      />
+    );
 
   return (
     <InicioScreen

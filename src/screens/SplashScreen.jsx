@@ -15,7 +15,7 @@ export default function SplashScreen({ onStart }) {
           resizeMode="contain"
         />
         <Text style={styles.splashTag}>Seu caminho ate a aprovacao.</Text>
-        <Button title="Comecar" onPress={onStart} gradientVariant="intro" />
+        <Button title="Começar" onPress={onStart} gradientVariant="intro" />
       </View>
     </ScreenLayout>
   );

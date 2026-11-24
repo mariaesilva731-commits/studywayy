@@ -2,6 +2,58 @@ import { supabase } from "./supabase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CALENDAR_STORAGE_KEY = "studyway:calendar-activities";
+const DAILY_TASKS_STORAGE_KEY = "studyway:daily-tasks";
+const STARTER_DAILY_TASKS = [
+  {
+    task_index: 0,
+    subject: "Organização",
+    title: "Organizar os materiais de estudo",
+    duration_minutes: 10,
+    is_completed: true,
+  },
+  {
+    task_index: 1,
+    subject: "Matemática",
+    title: "Resolver exercícios de matemática",
+    duration_minutes: 30,
+    is_completed: false,
+  },
+  {
+    task_index: 2,
+    subject: "Português",
+    title: "Revisar interpretação de texto",
+    duration_minutes: 25,
+    is_completed: true,
+  },
+  {
+    task_index: 3,
+    subject: "Biologia",
+    title: "Estudar um tópico de biologia",
+    duration_minutes: 30,
+    is_completed: false,
+  },
+  {
+    task_index: 4,
+    subject: "História",
+    title: "Revisar um tema de História do Brasil",
+    duration_minutes: 25,
+    is_completed: false,
+  },
+  {
+    task_index: 5,
+    subject: "Química",
+    title: "Resolver questões de Química",
+    duration_minutes: 30,
+    is_completed: false,
+  },
+  {
+    task_index: 6,
+    subject: "Geografia",
+    title: "Revisar mapas e conceitos de Geografia",
+    duration_minutes: 20,
+    is_completed: false,
+  },
+];
 
 function dateKey(date) {
   const year = date.getFullYear();
@@ -11,8 +63,107 @@ function dateKey(date) {
 }
 
 async function getUserId() {
-  const { data, error } = await supabase.auth.getUser();
-  return { userId: data?.user?.id, error };
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    return { userId: data?.user?.id, error };
+  } catch (error) {
+    return { userId: null, error };
+  }
+}
+
+function mapDailyTask(task) {
+  return {
+    ...task,
+    task_key: `task-${task.task_index}`,
+    source: "daily",
+    id: null,
+  };
+}
+
+function isStarterTask(task) {
+  const starter = STARTER_DAILY_TASKS.find(
+    (item) => item.task_index === task.task_index,
+  );
+  return starter && starter.title === task.title && starter.subject === task.subject;
+}
+
+async function getLocalDailyTasks(taskDate) {
+  try {
+    const saved = await AsyncStorage.getItem(DAILY_TASKS_STORAGE_KEY);
+    const tasks = saved ? JSON.parse(saved) : [];
+    if (!Array.isArray(tasks)) {
+      throw new Error("O formato das tarefas locais é inválido.");
+    }
+
+    const todaysTasks = tasks.filter((task) => task.task_date === taskDate);
+    if (todaysTasks.length) {
+      if (todaysTasks.every(isStarterTask)) {
+        const missingTasks = STARTER_DAILY_TASKS.filter(
+          (starter) =>
+            !todaysTasks.some((task) => task.task_index === starter.task_index),
+        ).map((task) => ({ ...task, task_date: taskDate }));
+        if (missingTasks.length) {
+          const updatedTasks = [...tasks, ...missingTasks];
+          await AsyncStorage.setItem(
+            DAILY_TASKS_STORAGE_KEY,
+            JSON.stringify(updatedTasks),
+          );
+          return {
+            data: [...todaysTasks, ...missingTasks].map(mapDailyTask),
+            error: null,
+          };
+        }
+      }
+      return { data: todaysTasks.map(mapDailyTask), error: null };
+    }
+
+    const starterTasks = STARTER_DAILY_TASKS.map((task) => ({
+      ...task,
+      task_date: taskDate,
+    }));
+    await AsyncStorage.setItem(
+      DAILY_TASKS_STORAGE_KEY,
+      JSON.stringify([...tasks, ...starterTasks]),
+    );
+    return { data: starterTasks.map(mapDailyTask), error: null };
+  } catch (error) {
+    return {
+      data: STARTER_DAILY_TASKS.map((task) => ({
+        ...mapDailyTask(task),
+        task_date: taskDate,
+      })),
+      error,
+    };
+  }
+}
+
+async function saveLocalDailyTask(taskDate, taskIndex, task, completed) {
+  try {
+    const saved = await AsyncStorage.getItem(DAILY_TASKS_STORAGE_KEY);
+    const tasks = saved ? JSON.parse(saved) : [];
+    if (!Array.isArray(tasks)) {
+      throw new Error("O formato das tarefas locais é inválido.");
+    }
+
+    const updatedTask = {
+      task_date: taskDate,
+      task_index: taskIndex,
+      subject: task.subject,
+      title: task.title,
+      duration_minutes: task.duration_minutes,
+      is_completed: completed,
+    };
+    const updated = [
+      ...tasks.filter(
+        (item) => item.task_date !== taskDate || item.task_index !== taskIndex,
+      ),
+      updatedTask,
+    ];
+    await AsyncStorage.setItem(DAILY_TASKS_STORAGE_KEY, JSON.stringify(updated));
+    return { data: mapDailyTask(updatedTask), error: null };
+  } catch (storageError) {
+    return { data: null, error: storageError };
+  }
 }
 
 export async function getStudyPlan(date = new Date()) {
@@ -30,37 +181,65 @@ export async function getStudyPlan(date = new Date()) {
   }));
 
   if (error || !userId) {
-    return { data: calendarTasks, error: null };
+    const localResult = await getLocalDailyTasks(taskDate);
+    return {
+      data: [...localResult.data, ...calendarTasks],
+      error: localResult.error,
+    };
   }
 
   const table = supabase.from("studyway_daily_tasks");
-  const current = await table
+  let current = await table
     .select("task_index, subject, title, duration_minutes, is_completed")
     .eq("user_id", userId)
     .eq("task_date", taskDate)
     .order("task_index");
 
+  if (!current.error && current.data.every(isStarterTask)) {
+    const starterTasks = STARTER_DAILY_TASKS.map((task) => ({
+      user_id: userId,
+      task_date: taskDate,
+      ...task,
+    }));
+    const seeded = await table.upsert(starterTasks, {
+      onConflict: "user_id,task_date,task_index",
+      ignoreDuplicates: true,
+    });
+    if (!seeded.error) {
+      current = await table
+        .select("task_index, subject, title, duration_minutes, is_completed")
+        .eq("user_id", userId)
+        .eq("task_date", taskDate)
+        .order("task_index");
+    } else {
+      current = { data: [], error: seeded.error };
+    }
+  }
 
-  if (current.error) return { data: calendarTasks, error: current.error };
-  const dailyTasks = current.data.map((task) => ({
-    ...task,
-    task_key: `task-${task.task_index}`,
-    source: "daily",
-    id: null,
-  }));
+  if (current.error) {
+    const localResult = await getLocalDailyTasks(taskDate);
+    return {
+      data: [...localResult.data, ...calendarTasks],
+      error: current.error,
+    };
+  }
+  const dailyTasks = current.data.map(mapDailyTask);
   return { data: [...dailyTasks, ...calendarTasks], error: null };
 }
 
 export async function updateStudyTask(taskIndex, task, completed, date = new Date()) {
   const { userId, error } = await getUserId();
-  if (error || !userId) return { data: null, error };
+  const taskDate = dateKey(date);
+  if (error || !userId) {
+    return saveLocalDailyTask(taskDate, taskIndex, task, completed);
+  }
 
-  return supabase
+  const result = await supabase
     .from("studyway_daily_tasks")
     .upsert(
       {
         user_id: userId,
-        task_date: dateKey(date),
+        task_date: taskDate,
         task_index: taskIndex,
         subject: task.subject,
         title: task.title,
@@ -72,6 +251,8 @@ export async function updateStudyTask(taskIndex, task, completed, date = new Dat
     )
     .select()
     .single();
+  if (!result.error) return result;
+  return saveLocalDailyTask(taskDate, taskIndex, task, completed);
 }
 
 export async function recordStudyActivity(activityType, date = new Date()) {
